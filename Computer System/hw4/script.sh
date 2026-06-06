@@ -12,15 +12,16 @@ echo "" > $b
 #цикл по сайтах
 for i in ${a[@]}
 do
-  #перевірка через curl
-  c=$(curl -L -s -o /dev/null -w "%{http_code}" $i)
 
+  #перевіряємо через curl
+
+  c=$(curl -L -s -o /dev/null -w "%{http_code}" $i)
   if [ $c == 200 ]
   then
     echo "<$i> is UP" >> $b
   else
     echo "<$i> is DOWN" >> $b
   fi
-done
 
+done
 echo "Готовий файл: $b"
