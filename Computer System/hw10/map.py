@@ -1,17 +1,16 @@
 import requests
 import matplotlib.pyplot as plt
 import re
+from concurrent.futures import ThreadPoolExecutor
 
 #прибираємо зайве
 def clean_text(text):
     text = text.lower()
-
     text = re.sub(r"http\S+", " ", text)
     text = re.sub(r"\d+", " ", text)
 
     #залишаємо англійські літери
     text = re.sub(r"[^a-z\s]", " ", text)
-
     text = re.sub(r"\s+", " ", text)
 
     return text
@@ -22,15 +21,12 @@ def get_text_from_url(url):
     return response.text
 
 #map
-def map_words(text):
-    words = text.split()
+def map_words(text_part):
+    result = []
+    for word in text_part.split():
+        result.append((word, 1))
 
-    mapped_words = []
-
-    for word in words:
-        mapped_words.append((word, 1))
-
-    return mapped_words
+    return result
 
 #reduce
 def reduce_words(mapped_words):
@@ -56,12 +52,8 @@ def remove_short_words(mapped_words):
 
 #візуалізація
 def visualize_top_words(word_count):
-    sorted_words = sorted(word_count.items(),
-                          key=lambda item: item[1],
-                          reverse=True)
-
+    sorted_words = sorted(word_count.items(), key=lambda item: item[1], reverse=True)
     top_words = sorted_words[:10]
-
     words = []
     counts = []
 
@@ -76,11 +68,25 @@ def visualize_top_words(word_count):
 
 #опрацювання тексту
 url = "https://www.gutenberg.org/cache/epub/11/pg11.txt"
+print("Завантаження тексту...")
 text = get_text_from_url(url)
 text = clean_text(text)
-mapped_words = map_words(text)
-mapped_words = remove_short_words(mapped_words)
-reduced_data = reduce_words(mapped_words)
-visualize_top_words(reduced_data)
+words = text.split()
+parts = []
+part_size = (len(words) // 4) + 1
+for i in range(0, len(words), part_size):
+    parts.append(' '.join(words[i:i + part_size]))
+with ThreadPoolExecutor(max_workers = 4) as executor:
+    result = executor.map(map_words, parts)
 
-print(sorted(reduced_data.items(), key=lambda item: item[1], reverse=True)[:10])
+mapped_words = []
+for part in result:
+    mapped_words.extend(part)
+
+filter_word = remove_short_words(mapped_words)
+word_count = reduce_words(filter_word)
+ 
+print(sorted(word_count.items(), key=lambda item: item[1], reverse=True)[:10])
+
+print("Візуалізація...")
+visualize_top_words(word_count)

@@ -3,6 +3,8 @@ import asyncio
 import os
 import shutil
 import logging
+from aiopath import AsyncPath
+from aioshutil import copyfile
 
 #налаштування логування помилок
 logging.basicConfig(filename="errors.log", level=logging.ERROR)
@@ -20,7 +22,8 @@ async def copy_one_file(file_path, target_folder):
         file_extension = file_path.split(".")[-1]
         new_folder_path = os.path.join(target_folder, file_extension)
         os.makedirs(new_folder_path, exist_ok=True)
-        shutil.copy(file_path, new_folder_path)
+        file_name = os.path.basename(file_path)
+        await copyfile(file_path, os.path.join(new_folder_path, file_name))
 
     except Exception as error:
         logging.error(str(error))
