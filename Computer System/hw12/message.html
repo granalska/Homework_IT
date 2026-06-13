@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang = 'ua'>
+    <head>
+        <link rel="stylesheet" href = 'style.css'>
+        <meta charset = "UTF-8">
+        <meta name="description" content="Вебсторінка для обміну повідомленнями через WebSocket">
+        <title>WebSocket для клієнтів</title>
+    </head>
+        <body>
+        <div class="container">
+
+            <div class="header">
+                <img src="websock.jpeg" width="120" alt="Логотип" class="logo">
+                <h1>Обмін повідомленнями</h1>
+            </div>
+            <div class="content">
+                <p>Введіть ваше ім’я та повідомлення та натисніть кнопку для передачі даних на сервер для обробки та збереження.</p>
+                <hr>
+                <form action="/message" method="post">
+                    <input type="hidden" name="user_id" id="user_id">
+
+                    <label>Введіть ваше ім’я</label>
+                    <input type="text" name="username" placeholder="Enter name"><br><br>
+
+                    <label>Введіть ваше повідомлення</label>
+                    <textarea name="message" placeholder="Enter message"></textarea><br><br>
+
+                    <label>Додайте файл або фото</label>
+                    <input type="file" name="file"><br><br>
+
+                    <input type="submit" value="Відправити"><br><br>
+                    <input type="reset" value="Очистити">
+                </form>
+            </div>
+        </div>
+        </body>
+</html> 
