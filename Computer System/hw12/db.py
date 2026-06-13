@@ -1,27 +1,14 @@
-import sqlite3
+from pymongo import MongoClient
 
-db = "messages.db"
+client = MongoClient("mongodb://localhost:27017/")
+db = client["messages_db"]
+collection = db["messages"]
 
 def init_db():
-    conn = sqlite3.connect(db)
-    c = conn.cursor()
-    c.execute("""CREATE TABLE IF NOT EXISTS messages(id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT)""")
-    conn.commit()
-    conn.close()
-
+    pass
 
 def save_message(text):
-    conn = sqlite3.connect(db)
-    c = conn.cursor()
-    c.execute("INSERT INTO messages (text) VALUES(?)", (text,))
-    conn.commit()
-    conn.close()
-
+    collection.insert_one({"text": text})
 
 def get_messages():
-    conn = sqlite3.connect(db)
-    c = conn.cursor()
-    c.execute("SELECT text FROM messages")
-    data = c.fetchall()
-    conn.close()
-    return [row[0] for row in data]
+    return [m["text"] for m in collection.find()]
