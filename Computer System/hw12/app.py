@@ -36,7 +36,7 @@ class processing_requests(BaseHTTPRequestHandler):
             save_message(data.decode())
 
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #передача даних через порт
-            sock.connect(('localhost', 5000))
+            sock.connect(('app', 5000))
             sock.send(data)
             sock.close()
 
@@ -45,6 +45,9 @@ class processing_requests(BaseHTTPRequestHandler):
             self.end_headers()
             
 init_db()
-if __name__ == '__main__':
+def run_http_server():
     print('Сервер працює на http://localhost:3000')
-    HTTPServer(('localhost', 3000), processing_requests).serve_forever()
+    HTTPServer(('0.0.0.0', 3000), processing_requests).serve_forever()
+
+if __name__ == '__main__':
+    run_http_server()
