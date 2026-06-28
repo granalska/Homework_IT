@@ -86,7 +86,7 @@ print('----------------------------------\n')
 
 #фінальне навчання(беремо random forest так як там більший результат)
 if random_scores.mean() > log_scores.mean():
-    final_model = Pipeline(steps= [('data_preprogress', database_pipeline), ('model_train', RandomForestClassifier(n_estimators= 200, random_state=42, n_jobs=-1))])
+    final_model = Pipeline(steps= [('data_preprocess', database_pipeline), ('model_train', RandomForestClassifier(n_estimators= 200, random_state=42, n_jobs=-1))])
     print('Final Model Random Forest')
 
 else:
@@ -100,13 +100,13 @@ print('ФІнальне навчання моделі завершено')
 print('----------------------------------\n')
 
 #передбачення
-test_prediction = final_model.predict(test_database)
+test_prediction = final_model.predict_proba(test_database)[:,1]
 
 print('Прогноз створено', test_prediction)
 
 #створення файлу csv
 submission_database = pd.DataFrame({'index': test_database.index, 'y': test_prediction})
-sample_database.to_csv('submission.csv', index= False)
+submission_database.to_csv('submission.csv', index= False)
 
 print('Файл csv створено')
 print('----------------------------------\n')
