@@ -119,16 +119,20 @@ print('MSE:', mse)
 print('MAE:', mae)
 print('R2:', r2)
 
-#малюємо помилку
+# графік помилки
 plt.plot(losses)
 plt.xlabel('епоха')
 plt.ylabel('помилка')
 plt.title('зміна помилки під час навчання')
-plt.show()
+plt.savefig('loss.png')
+plt.show(block=False)
+plt.pause(2)
+plt.close()
 
-#малюємо справжні і прогнозовані ціни
+# графік справжніх і прогнозованих цін
 plt.scatter(y_test, pred)
 plt.xlabel('справжня ціна')
 plt.ylabel('прогнозована ціна')
 plt.title('справжні та прогнозовані значення')
+plt.savefig('predictions.png')
 plt.show()
