@@ -1,0 +1,37 @@
+service:
+  name: medical-records #назва мікросервісу
+  debug: false #не показуємо технічні дані користувачам
+
+database:
+  encryption: AES-256-GCM #шифруємо медичні записи
+  encryption_at_rest: true #захищаємо дані у сховищі
+  tls_required: true #шифруємо з'єднання з базою
+  backups_encrypted: true #шифруємо резервні копії
+
+jwt:
+  algorithm: RS256 #підписуємо токени
+  verify_signature: true #перевіряємо підпис
+  exp_required: true #перевіряємо термін дії
+  audience_check: true #перевіряємо отримувача токена
+
+passwords:
+  algorithm: argon2id #захищаємо паролі
+  unique_salt: true #використовуємо окрему сіль для кожного пароля
+
+transport:
+  tls_min_version: '1.3' #захищаємо передавання даних
+  mutual_tls: true #перевіряємо обидві сторони з'єднання між сервісами
+
+keys:
+  storage: KMS #ключі зберігаються окремо від даних
+  rotation_enabled: true #передбачаємо заміну ключів
+  secrets_in_config: false #не записуємо секрети у файл
+
+access:
+  rbac_enabled: true #права залежать від ролі
+  least_privilege: true #надаємо лише необхідні права
+  check_patient_ownership: true #перевіряємо право доступу до запису пацієнта
+
+audit:
+  enabled: true #записуємо важливі дії
+  log_record_access: true #фіксуємо перегляд і зміну записів

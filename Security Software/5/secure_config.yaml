@@ -1,0 +1,21 @@
+jwt:
+  algorithm: RS256 #підписуємо токени приватним ключем
+  verify_signature: true #перевіряємо підпис токена
+  exp_required: true #обов'язково перевіряємо термін дії
+  aud_check: true #перевіряємо отримувача токена
+
+passwords:
+  hash_function: argon2id #використовуємо сучасний алгоритм для паролів
+  memory_cost: 19456 #виділяємо 19 MiB пам'яті
+  time_cost: 2 #виконуємо два проходи алгоритму
+  unique_salt: true #кожен пароль має власну випадкову сіль
+
+encryption:
+  algorithm: AES-256-GCM #шифруємо дані та перевіряємо їх цілісність
+  key_length: 256 #використовуємо ключ довжиною 256 біт
+  iv_strategy: unique_nonce #для кожного шифрування потрібен унікальний nonce
+  key_storage: KMS #зберігаємо ключі в захищеному сховищі
+  key_rotation: enabled #передбачаємо заміну ключів
+
+transport:
+  minimum_tls_version: '1.3' #захищаємо передавання даних
